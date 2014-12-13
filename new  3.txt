@@ -1,0 +1,22 @@
+   if (SQLQuery.FieldByName('islast').AsInteger = 1) then
+      begin
+        if Assigned(pNode) then
+          begin
+            while (SQLQuery.FieldByName('lvl').AsInteger < (pNode.Level + 1)) do
+              pNode := pNode.Parent;
+            pNode := TreeView1.Items.AddChild(pNode, SQLQuery.FieldByName('name').AsString)
+          end
+        else
+          pNode := TreeView1.Items.Add(nil, SQLQuery.FieldByName('name').AsString);
+        //ShowMessage(pNode.);
+      end
+    else
+      begin
+        if Assigned(pNode) then
+        begin
+          TreeView1.Items.AddChild(pNode, SQLQuery.FieldByName('name').AsString);
+          pNode := nil;
+        end
+        else
+          TreeView1.Items.Add(nil, SQLQuery.FieldByName('name').AsString);
+      end;       

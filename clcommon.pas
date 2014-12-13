@@ -1,0 +1,143 @@
+unit clCommon;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils;
+
+type
+  { TCompareEnum }
+//  TChar50 = char[1..50];
+
+  { TTreeData }
+
+  TTreeData = class
+  private
+    FPath: String;
+    FSubPath: String;
+    FStore: String;
+  public
+    constructor Create(APath, ASubPath, AStore: String);
+    property Path: String read FPath;
+    property SubPath: String read FSubPath;
+    property Store: String read FStore;
+  end;
+
+  PTreeData = ^TTreeData;
+
+  TPTDArray = Array of PTreeData;
+  TTTDArray = Array of TTreeData;
+  { TTreeDataCollection }
+
+  TTreeDataCollection = class
+  private
+    FOwner: TObject;
+    FItems: TPTDArray;
+    FDataItems: TTTDArray;
+    function GetItem(AnIndex: Integer): TTreeData;
+    function GetPItem(AnIndex: Integer): PTreeData;
+    function GetCount(): Integer;
+  public
+    constructor Create(AnOwner: TObject);
+    destructor Destroy; override;
+    function Add(APath, ASubPath, AStore: String): PTreeData;
+    function FindItem(APath: String): PTreeData;
+    procedure Clear();
+    property PItems[ItemIndex: Integer]: PTreeData read GetPItem;
+    property Items[ItemIndex: Integer]: TTreeData read GetItem;
+    property Count: Integer read GetCount;
+  end;
+
+implementation
+
+{ TTreeData }
+
+constructor TTreeData.Create(APath, ASubPath, AStore: String);
+begin
+  Self.FPath:= APath;
+  Self.FSubPath:= ASubPath;
+  Self.FStore:= AStore;
+end;
+
+{ TTreeDataCollection }
+
+function TTreeDataCollection.GetItem(AnIndex: Integer): TTreeData;
+begin
+  Result := FDataItems[AnIndex];
+end;
+
+function TTreeDataCollection.GetPItem(AnIndex: Integer): PTreeData;
+begin
+  Result := FItems[AnIndex];
+end;
+
+function TTreeDataCollection.GetCount: Integer;
+begin
+  Result := Length(FItems);
+end;
+
+constructor TTreeDataCollection.Create(AnOwner: TObject);
+begin
+  FOwner := AnOwner;
+  SetLength(FItems, 0);
+end;
+
+destructor TTreeDataCollection.Destroy;
+begin
+  Clear;
+  inherited Destroy;
+end;
+
+function TTreeDataCollection.Add(APath, ASubPath, AStore: String): PTreeData;
+var
+  tData: TTreeData;
+begin
+  if FindItem(APath) = nil then
+  try
+    tData := TTreeData.Create(APath, ASubPath, AStore);
+
+    // данные сохраняем
+    SetLength(FDataItems, Length(FDataitems) + 1);
+    FDataItems[High(FDataItems)] := tData;
+
+    // сохраняем ссылку
+    SetLength(FItems, Length(Fitems) + 1);
+    FItems[High(FItems)] := @FDataItems[High(FDataItems)];
+
+    Result := FItems[High(FItems)];
+    Exit;
+  except
+    tData.Free;
+  end;
+end;
+
+function TTreeDataCollection.FindItem(APath: String): PTreeData;
+var
+  i: Integer;
+begin
+  Result := nil;
+  if Length(FDataItems) <> Length(FItems) then
+    Exit;
+  for i := 0 to High(FDataItems) do
+  begin
+    if FDataItems[i].Path = APath then
+    begin
+      Result := FItems[i];
+      Exit;
+    end;
+  end;
+end;
+
+procedure TTreeDataCollection.Clear;
+var
+  i: Integer;
+begin
+  for i := 0 to High(FItems) do
+    FItems[i] := nil;
+  SetLength(FItems, 0);
+end;
+
+end.
+

@@ -1,0 +1,36 @@
+object fQueryResult: TfQueryResult
+  Left = 542
+  Height = 386
+  Top = 192
+  Width = 769
+  Caption = 'fQueryResult'
+  ClientHeight = 386
+  ClientWidth = 769
+  OnShow = FormShow
+  LCLVersion = '1.2.0.3'
+  object gr_Result: TDBGrid
+    Left = 0
+    Height = 386
+    Top = 0
+    Width = 769
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    DataSource = ds_Result
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAutoSizeColumns]
+    TabOrder = 0
+  end
+  object sql_Result: TSQLQuery
+    FieldDefs = <>
+    Database = Form1.PQConnection
+    Transaction = Form1.SQLTransaction
+    Params = <>
+    left = 424
+    top = 48
+  end
+  object ds_Result: TDatasource
+    DataSet = sql_Result
+    left = 488
+    top = 48
+  end
+end

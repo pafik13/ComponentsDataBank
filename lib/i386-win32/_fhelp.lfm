@@ -1,0 +1,58 @@
+object fHelp: TfHelp
+  Left = 502
+  Height = 396
+  Top = 221
+  Width = 793
+  Caption = 'fHelp'
+  ClientHeight = 396
+  ClientWidth = 793
+  OnShow = FormShow
+  Position = poOwnerFormCenter
+  LCLVersion = '1.2.0.3'
+  object StringGrid1: TStringGrid
+    Left = 0
+    Height = 396
+    Top = 0
+    Width = 793
+    Align = alClient
+    ColCount = 0
+    FixedCols = 0
+    FixedRows = 0
+    HeaderHotZones = []
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect, goSmoothScroll]
+    RowCount = 0
+    TabOrder = 0
+  end
+  object SQLQuery: TSQLQuery
+    FieldDefs = <    
+      item
+        Name = 'id'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'name'
+        DataType = ftMemo
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'discrete'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end>
+    Database = Form1.PQConnection
+    Transaction = Form1.SQLTransaction
+    SQL.Strings = (
+      'select adc."id"'
+      '     , adc."name" as "Наименование"'
+      '     , adc."discrete"'
+      '  from "tbl_ad_converters" adc'
+    )
+    Params = <>
+    left = 512
+    top = 104
+  end
+end

@@ -1,0 +1,28 @@
+object fQueryConditions: TfQueryConditions
+  Left = 571
+  Height = 441
+  Top = 186
+  Width = 651
+  Caption = 'fQueryConditions'
+  ClientHeight = 441
+  ClientWidth = 651
+  OnShow = FormShow
+  LCLVersion = '1.2.0.3'
+  object Button1: TButton
+    Left = 48
+    Height = 25
+    Top = 300
+    Width = 75
+    Caption = 'Button1'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object sql_ColumnInfo: TSQLQuery
+    FieldDefs = <>
+    Database = Form1.PQConnection
+    Transaction = Form1.SQLTransaction
+    Params = <>
+    left = 376
+    top = 32
+  end
+end

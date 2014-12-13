@@ -1,0 +1,14 @@
+select w."id"
+     , w."name"
+     , nlevel(w."tree") as lvl
+     , w."tree"::varchar(50) as path
+     , subpath(w."tree", nlevel(w."tree") - 1, 1)::varchar(50) as subpath
+     , (select 1
+          from dual
+         where exists (select "tree"
+                         from "world"
+                        where "tree" <@ w."tree"
+                          and "tree" <> w."tree")) as islast
+  from "world" w
+ ORDER
+    BY "tree"     
